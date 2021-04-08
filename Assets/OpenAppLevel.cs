@@ -211,6 +211,7 @@ public class OpenAppLevel : MonoBehaviour
         GetLevels2.UpdateLevels();
         GetMoveLayer.gameObject.SetActive(false);
         NextImage.gameObject.SetActive(false);
+        //loadNext();//
     }
     public void Nazad()
     {
@@ -232,6 +233,7 @@ public class OpenAppLevel : MonoBehaviour
             GetMoveLayer.gameObject.SetActive(false);
             NextImage.gameObject.SetActive(false);
             GetMoveLayer.ender();
+            //loadNext();
         }
         else
         {
@@ -239,6 +241,47 @@ public class OpenAppLevel : MonoBehaviour
             NextImage.gameObject.SetActive(false);
             GetButton.SetActive(false);
             GetMoveLayer.ender();
+        }
+    }
+    public void loadNext()
+    {
+        GetText.text = string.Format("{0}", printScores);
+        PlayerPrefs.SetInt(string.Format("{0}", currentlvl + 1), 1);
+        NazadButton.gameObject.SetActive(true);
+        NextImage.gameObject.SetActive(true);
+        NextImage.GetComponent<Animation>().Play();
+        SaveBombStripePackage();
+        if (printScores >= TargetScore)
+        {
+            NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(true);
+            //loadLB();
+            //GetMoveLayer.ender();
+            PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star1");
+            if (printScores >= TargetScore1)
+            {
+                NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(true);
+                PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star2");
+                if (printScores >= TargetScore2)
+                {
+                    NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(true);
+                    PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star3");
+                }
+                else
+                {
+                    NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
+                }
+            }
+            else
+            {
+                NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
+                NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
+            }
+        }
+        else
+        {
+            NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(false);
+            NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
+            NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
         }
     }
     IEnumerator GetEnumerator()

@@ -555,6 +555,17 @@ public class MoveLayer : MonoBehaviour {
                 }
             }
         }
+        for (int row = 0; row < 5; row++)
+        {
+            for (int col = 0; col < 9; col++)
+            {
+                Destroy(OpenAppLevel.THIS.bblocks[row * 9 + col].gameObject);
+            }
+        }
+        foreach(var pp in BlockParents)
+        {
+            Destroy(pp.gameObject);
+        }
     }
     /// <summary>
     /// начало
@@ -638,6 +649,8 @@ public class MoveLayer : MonoBehaviour {
         GameObject vblck = ((GameObject)Instantiate(blockpref, levelsApps.vector2position + new Vector2(i * levelsApps.blckWH(), j * levelsApps.blckWH()), Quaternion.identity));
         vblck.transform.SetParent(GetArrays.transform);
         blocksquare[j * SizeX + i] = vblck.GetComponent<Block>();
+        BlockParents.Add(vblck.GetComponent<Block>());
+        BlockParents.Add(vblck2);
         vblck.GetComponent<Block>().row = j;
         vblck.GetComponent<Block>().col = i;
         vblck.GetComponent<Block>().types = 1;
