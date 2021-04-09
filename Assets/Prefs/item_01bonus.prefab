@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: red
+  saverow: 0
+  savecol: 0
+  GetSpriteSquare: {fileID: 21300000, guid: ba56b898e0d6dbe41b30b3fa5baa11fd, type: 3}
   isBonus: 0
   BonusMatchType: 0
   isSwirl: 0

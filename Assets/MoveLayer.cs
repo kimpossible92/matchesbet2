@@ -30,6 +30,9 @@ public class MoveLayer : MonoBehaviour {
     [SerializeField] GameObject blockpref;
     HitCandy GetHitGem;
     HitCandy GetHitNext;
+    Sprite GetHitColor;
+    protected List<HitCandy> HitsCand;
+    [SerializeField] Sprite[] GetHitColors;
     [SerializeField] Sprite sprite12;
     public HitCandy bubble, bubble2;
     [SerializeField] HitCandy[] GetBonusPrefab;
@@ -96,6 +99,14 @@ public class MoveLayer : MonoBehaviour {
         //BubleCursor.GetComponent<HitCandy>() = GetHitGem;
         bubble2 = GetHitGem;
         GetHitNext = GetCandyPrefab[Random.Range(0, GetCandyPrefab.Length)];
+        //if (GetHitGem != null)
+        //{
+        //    HitsCand.Add(GetHitGem);
+        //}
+        //if (bubble2 != null)
+        //{
+        //    HitsCand.Add(bubble2);
+        //}
     }
     // Use this for initialization
     void Start()
@@ -123,14 +134,26 @@ public class MoveLayer : MonoBehaviour {
             
         }
         //BubleCursor.sprite = GetHitGem.GetComponent<SpriteRenderer>().sprite;
+        if (Input.GetMouseButtonDown(0))
+        {
+            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.zero);
+            if (hit.collider != null && state == 1)
+            {
+                BlockParents.Remove(GetBlockMove);
+                CurrentBlk = hit.collider.GetComponent<Block>();
+                Destroy(GetBlockMove.gameObject);
+                state = 0;
+            }
+        }
         if (Input.GetMouseButtonDown(1))
         {
             var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.zero);
-            print(state);
+            //print(hit.collider.GetComponent<Block>().types);
             if (hit.collider != null&&state==1)
             {
                 //StopCoroutine(TryMatch(hit));
                 CurrentBlk = hit.collider.GetComponent<Block>();
+
                 //GetHitGem = GetCandyPrefab[Random.Range(0, GetCandyPrefab.Length)];
                 //BubleCursor.sprite = GetHitGem.GetComponent<SpriteRenderer>().sprite;
                 ////BubleCursor.GetComponent<HitCandy>() = GetHitGem;
@@ -145,7 +168,8 @@ public class MoveLayer : MonoBehaviour {
                         //BubleCursor.sprite = GetHitGem.GetComponent<SpriteRenderer>().sprite;
                         ////BubleCursor.GetComponent<HitCandy>() = GetHitGem;
                         //bubble2 = GetHitGem;
-                        MoveParents.Clear();
+                        GetBlockMove = null;
+                        //MoveParents.Clear();
 
                         state = 0;
                     }
@@ -202,6 +226,7 @@ public class MoveLayer : MonoBehaviour {
                                 GetArrays[GetBlockMove.row, GetBlockMove.col] = new Gem(GetBlockMove.row, GetBlockMove.col);
                                 GetArrays[GetBlockMove.row, GetBlockMove.col].Nil();
                                 var lisp = GetArrays.GetProp2(cndy.GetBlock, cndy.GetBlock.row, cndy.GetBlock.col);
+                                BlockParents.Add(GetBlockMove);
                                 MoveCount = lisp.GetGems.Count();
                                 currentHitList = lisp.GetGems;
                                 //GameObject vblck = ((GameObject)Instantiate(blockpref, levelsApps.vector2position + new Vector2(cndy.GetBlock.col * levelsApps.blckWH(), cndy.GetBlock.row * levelsApps.blckWH()), Quaternion.identity));
@@ -233,7 +258,6 @@ public class MoveLayer : MonoBehaviour {
                             var cndy = hit.collider.GetComponent<HitCandy>();
                             currentHits = hit.collider.GetComponent<HitCandy>();
                             MoveParents.Add(CurrentBlk);
-
                             hit.collider.GetComponent<HitCandy>();
                             if (CurrentBlk != null)
                             {
@@ -245,8 +269,17 @@ public class MoveLayer : MonoBehaviour {
                                     GetHitNext = GetCandyPrefab[Random.Range(0, GetCandyPrefab.Length)];
                                     //BubleCursor.GetComponent<HitCandy>() = GetHitGem;
                                     bubble2 = GetHitGem;
+                                    //if (GetHitGem != null)
+                                    //{
+                                    //    HitsCand.Add(GetHitGem);
+                                    //}
+                                    //if (bubble2 != null)
+                                    //{
+                                    //    HitsCand.Add(bubble2);
+                                    //}
                                 }
                                 CreateGem(CurrentBlk.row, CurrentBlk.col, GetHitGem);//
+                                
                                 switch (bubbleplus)
                                 {
                                     case 0:
@@ -271,6 +304,8 @@ public class MoveLayer : MonoBehaviour {
                                         break;
                                     case 4:
                                         break;
+                                    default:
+                                        break;
                                 }
                                 StartCoroutine(TryMatch(hit));
                                 GetHitGem = GetHitNext;
@@ -278,6 +313,14 @@ public class MoveLayer : MonoBehaviour {
                                 GetHitNext = GetCandyPrefab[Random.Range(0, GetCandyPrefab.Length)];
                                 //BubleCursor.GetComponent<HitCandy>() = GetHitGem;
                                 bubble2 = GetHitGem;
+                                //if (GetHitGem != null)
+                                //{
+                                //    HitsCand.Add(GetHitGem);
+                                //}
+                                //if (bubble2 != null)
+                                //{
+                                //    HitsCand.Add(bubble2);
+                                //}
                             }
                             if ((uint)levelsApps.ltype == 1)
                             {
@@ -555,23 +598,36 @@ public class MoveLayer : MonoBehaviour {
                 }
             }
         }
-        for (int row = 0; row < 5; row++)
+        for (int row = 0; row < 8; row++)
         {
             for (int col = 0; col < 9; col++)
             {
-                Destroy(OpenAppLevel.THIS.bblocks[row * 9 + col].gameObject);
+                if (OpenAppLevel.THIS.bblocks[row * 9 + col] != null)
+                {
+                    Destroy(OpenAppLevel.THIS.bblocks[row * 9 + col].gameObject);
+                }
             }
         }
         foreach(var pp in BlockParents)
         {
-            Destroy(pp.gameObject);
+            if(pp!=null)Destroy(pp.gameObject);
         }
+        foreach (var pp2 in MoveParents)
+        {
+            if (pp2 != null) Destroy(pp2.gameObject);
+        }
+        //foreach(var pp3 in HitsCand)
+        //{
+        //    if (pp3 != null) { Destroy(pp3.gameObject); }
+        //}
     }
     /// <summary>
     /// начало
     /// </summary>
     private void Gems()
     {
+        BlockParents.Clear();
+        MoveParents.Clear();
         GetHitGem = GetHitNext;
         GetHitNext = GetCandyPrefab[Random.Range(0, GetCandyPrefab.Length)];
         BubleCursor.sprite = GetHitGem.GetComponent<SpriteRenderer>().sprite;
@@ -653,10 +709,23 @@ public class MoveLayer : MonoBehaviour {
         BlockParents.Add(vblck2);
         vblck.GetComponent<Block>().row = j;
         vblck.GetComponent<Block>().col = i;
+        vblck.GetComponent<Block>().types = 9;
+        vblck.transform.SetParent(vblck2.gameObject.transform);
+        vblck.GetComponent<Block>().goParent = vblck2;
+    }
+    public void CreateColorSquare(int i, int j, Block vblck2, Sprite sprite)
+    {
+        GameObject vblck = ((GameObject)Instantiate(blockpref, levelsApps.vector2position + new Vector2(i * levelsApps.blckWH(), j * levelsApps.blckWH()), Quaternion.identity));
+        vblck.transform.SetParent(GetArrays.transform);
+        blocksquare[j * SizeX + i] = vblck.GetComponent<Block>();
+        BlockParents.Add(vblck.GetComponent<Block>());
+        BlockParents.Add(vblck2);
+        vblck.GetComponent<Block>().row = j;
+        vblck.GetComponent<Block>().col = i;
         vblck.GetComponent<Block>().types = 1;
         vblck.transform.SetParent(vblck2.gameObject.transform);
         vblck.GetComponent<Block>().goParent = vblck2;
-        
+        vblck.GetComponent<SpriteRenderer>().sprite = sprite;
     }
     public bool IsNulls(int row, int col)
     {
@@ -763,6 +832,7 @@ public class MoveLayer : MonoBehaviour {
         {
             GetHitGem.type = GetHitGem2.type;
         }
+        GetHitColor = GetHitColors[Random.Range(0, GetHitColors.Length)];
         if (GetHitGem2.type == "swirl"&& GetHitGem.type != "ingredient" + 0&&GetHitGem.type != "ingredient"+1)
         {
             GetHitGem2.type = GetHitGem.type;
@@ -775,14 +845,15 @@ public class MoveLayer : MonoBehaviour {
         else { blockpr = GetHitGem.GetBlock; }
         var GetHitGemNeigbours = GetArrays.GetProp(blockpr, blockpr.row, blockpr.col);
         var GetHitGemNeigbours2 = GetArrays.GetProp(OpenAppLevel.THIS.blocksp[currentrow*OpenAppLevel.THIS.MaxX + currentcol],currentrow,currentcol);        
-        var matchs = GetHitGemNeigbours.GetGems.Union(GetHitGemNeigbours2.GetGems).Distinct();        
+        var matchs = GetHitGemNeigbours.GetGems.Union(GetHitGemNeigbours2.GetGems).Distinct();
+        movecount -= 1;
         if (matchs.Count() < 3)
         {
             //GetHitGem.transform.TweenPosition(0.2f, GetHitGem2.transform.position);
             //GetHitGem2.transform.TweenPosition(0.2f, GetHitGem.transform.position);
             yield return new WaitForSeconds(0.2f);
             GetArrays.Lastsp();
-            movecount += 1;
+            
             if (Ending==1)
             {
                 Ending = 0;
@@ -814,10 +885,11 @@ public class MoveLayer : MonoBehaviour {
                     OpenAppLevel.THIS.printScores += 10;
                     //GetArrays.gems[i.row, i.col] = new Gem(i.row, i.col);
                     //GetArrays.gems[i.row, i.col].Nil();
-                    if (i.candy != null &&i.dontDest==false) { Destroy(i.candy.gameObject); }
+                    CreateColorSquare(i.col, i.row, GetHitGem.GetBlock, GetHitColor);
+                    if (i.candy != null) { Destroy(i.candy.gameObject); }
                     neighbour = GetArrays.GetProp(i, i.row, i.col);
                     //GetHitGem.transform.SetParent(GetHitGem.GetBlock.transform);
-                    CreateSquaresBlocks(i.col, i.row,GetHitGem.GetBlock);
+                    
                     GetBlockMove = GetHitGem.GetBlock;
                     matchs = neighbour.GetGems;
                 }

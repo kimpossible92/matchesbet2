@@ -108,8 +108,8 @@ public class OpenAppLevel : MonoBehaviour
                 Createblock(col, row);
             }
         }
-        bblocks = new Block[5 * 9];
-        for (int row = 0; row < 5; row++)
+        bblocks = new Block[8 * 9];
+        for (int row = 0; row < 8; row++)
         {
             for (int col = 0; col < 9; col++)
             {
@@ -179,7 +179,10 @@ public class OpenAppLevel : MonoBehaviour
         {
             for (int col = 0; col < MaxX; col++)
             {
-                Destroy(blocksp[row * MaxX + col].gameObject);
+                if (blocksp[row * MaxX + col] != null) 
+                { 
+                    Destroy(blocksp[row * MaxX + col].gameObject);
+                }
             }
         }
     }
@@ -529,44 +532,45 @@ public class OpenAppLevel : MonoBehaviour
         }
         if (onmode3block == true && printScores != 0 && printScores >= TargetScore && GetMoveLayer.movecount == GetMoveLayer.limitMove && GetMoveLayer.state == 0)
         {
-            GetText.text = string.Format("{0}", printScores);
-            PlayerPrefs.SetInt(string.Format("{0}", currentlvl + 1), 1);
-            NazadButton.gameObject.SetActive(true);
-            NextImage.gameObject.SetActive(true);
-            NextImage.GetComponent<Animation>().Play();
-            SaveBombStripePackage();
-            if (printScores >= TargetScore)
-            {
-                NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(true);
-                //loadLB();
-                //GetMoveLayer.ender();
-                PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star1");
-                if (printScores >= TargetScore1)
-                {
-                    NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(true);
-                    PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star2");
-                    if (printScores >= TargetScore2)
-                    {
-                        NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(true);
-                        PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star3");
-                    }
-                    else
-                    {
-                        NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
-                    }
-                }
-                else
-                {
-                    NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
-                    NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
-                }
-            }
-            else
-            {
-                NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(false);
-                NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
-                NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
-            }
+            nazad2();//
+            //GetText.text = string.Format("{0}", printScores);
+            //PlayerPrefs.SetInt(string.Format("{0}", currentlvl + 1), 1);
+            //NazadButton.gameObject.SetActive(true);
+            //NextImage.gameObject.SetActive(true);
+            //NextImage.GetComponent<Animation>().Play();
+            //SaveBombStripePackage();
+            //if (printScores >= TargetScore)
+            //{
+            //    NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(true);
+            //    //loadLB();
+            //    //GetMoveLayer.ender();
+            //    PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star1");
+            //    if (printScores >= TargetScore1)
+            //    {
+            //        NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(true);
+            //        PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star2");
+            //        if (printScores >= TargetScore2)
+            //        {
+            //            NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(true);
+            //            PlayerPrefs.SetString(string.Format("lvl:{0}", currentlvl), "star3");
+            //        }
+            //        else
+            //        {
+            //            NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
+            //        NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
+            //    }
+            //}
+            //else
+            //{
+            //    NextImage.GetComponent<NextImageScript>().starPrefab1.SetActive(false);
+            //    NextImage.GetComponent<NextImageScript>().starPrefab2.SetActive(false);
+            //    NextImage.GetComponent<NextImageScript>().starPrefab3.SetActive(false);
+            //}
         }
     }
     bool load12p=false;

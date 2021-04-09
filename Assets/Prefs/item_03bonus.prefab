@@ -96,6 +96,7 @@ MonoBehaviour:
   type: purple
   saverow: 0
   savecol: 0
+  GetSpriteSquare: {fileID: 21300000, guid: f24a35d60320a734ab01fb15d5712bdc, type: 3}
   isBonus: 0
   BonusMatchType: 0
   isSwirl: 0

@@ -6,6 +6,7 @@ public class HitCandy : MonoBehaviour {
     public string type;
     public int saverow = 0;
     public int savecol = 0;
+    public Sprite GetSpriteSquare;
     public Gem GetGem { get; private set; }
     public Block GetBlock { get; private set; }
     public bool isBonus;
