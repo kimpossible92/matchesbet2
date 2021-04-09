@@ -885,7 +885,7 @@ public class MoveLayer : MonoBehaviour {
                     OpenAppLevel.THIS.printScores += 10;
                     //GetArrays.gems[i.row, i.col] = new Gem(i.row, i.col);
                     //GetArrays.gems[i.row, i.col].Nil();
-                    CreateColorSquare(i.col, i.row, GetHitGem.GetBlock, GetHitColor);
+                    CreateSquaresBlocks(i.col, i.row, CurrentBlk);
                     if (i.candy != null) { Destroy(i.candy.gameObject); }
                     neighbour = GetArrays.GetProp(i, i.row, i.col);
                     //GetHitGem.transform.SetParent(GetHitGem.GetBlock.transform);
