@@ -142,7 +142,7 @@ public class MoveLayer : MonoBehaviour {
                 BlockParents.Remove(GetBlockMove);
                 CurrentBlk = hit.collider.GetComponent<Block>();
                 Destroy(GetBlockMove.gameObject);
-                state = 0;
+                StartCoroutine(GetEnumerator());
             }
         }
         if (Input.GetMouseButtonDown(1))
@@ -171,7 +171,7 @@ public class MoveLayer : MonoBehaviour {
                         GetBlockMove = null;
                         //MoveParents.Clear();
 
-                        state = 0;
+                        StartCoroutine(GetEnumerator());
                     }
                 }
                
@@ -819,6 +819,12 @@ public class MoveLayer : MonoBehaviour {
     protected void MoveToSquare()
     {
         ///OpenAppLevel.THIS.sq
+    }
+    IEnumerator GetEnumerator()
+    {
+        yield return new WaitForSeconds(0.3f);
+        state = 0;
+        yield return new WaitForSeconds(0.2f);
     }
     /// <summary>
     /// Начинаем собирать совпадения
